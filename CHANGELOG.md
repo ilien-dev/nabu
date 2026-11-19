@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/ilien-dev/nabu/compare/v0.2.2...v0.2.3) (2026-11-19)
+
+
+### Bug Fixes
+
+* make screenshots optional in the pr rules check ([#9](https://github.com/ilien-dev/nabu/issues/9)) ([89a9a6a](https://github.com/ilien-dev/nabu/commit/89a9a6a27f3cab146fcaa7d9b12d743747039fa1))
+
 ## [0.2.2](https://github.com/ilien-dev/nabu/compare/v0.2.1...v0.2.2) (2026-11-19)
 
 
