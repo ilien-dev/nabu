@@ -9,10 +9,10 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { renderTemplate, normalizeRules } from '../scripts/nabu.mjs';
+import { renderTemplate, normalizeRules } from '../skills/nabu/scripts/nabu.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const NABU = path.join(HERE, '..', 'scripts', 'nabu.mjs');
+const NABU = path.join(HERE, '..', 'skills', 'nabu', 'scripts', 'nabu.mjs');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'nabu-test-'));
 const LOG = path.join(TMP, 'gh-calls.jsonl');
 const ENV = { ...process.env, NABU_GH_STUB: path.join(HERE, 'gh-stub.mjs'), NABU_GH_LOG: LOG };

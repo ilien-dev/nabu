@@ -1,6 +1,7 @@
 - Tests: `node tests/run.mjs`. They and the evals must never reach real GitHub: `gh` goes through `tests/gh-stub.mjs` (`NABU_GH_STUB`, `NABU_GH_LOG`) and fixtures use remotes of a nonexistent owner.
-- `scripts/nabu.mjs` stays Node 18+ with no dependencies.
-- `assets/` is the standard itself: every repository gets the change on its next `render`. Fix a gap here, never by patching a managed file in one repository.
-- `assets/github/scripts/check-pr.cjs` stays CommonJS so it runs in repositories with `"type": "module"`.
+- The skill lives in `skills/nabu/`; `skills/nabu/scripts/nabu.mjs` stays Node 18+ with no dependencies.
+- `skills/nabu/assets/` is the standard itself: every repository gets the change on its next `render`. Fix a gap here, never by patching a managed file in one repository.
+- Bump `version` in `.claude-plugin/plugin.json` on a release; installed copies only update when it changes.
+- `skills/nabu/assets/github/scripts/check-pr.cjs` stays CommonJS so it runs in repositories with `"type": "module"`.
 - In templates `{{name}}` is a Nabu variable and `${{ ... }}` is GitHub's; variable names never contain spaces.
 - `evals/evals.json` — eval prompts; runs and `grade.py` live in `../nabu-workspace/`. Read it when a change alters what the skill does.

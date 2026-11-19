@@ -21,19 +21,31 @@ automatic with release-please. A script does that work, not the agent's reading 
 - GitHub settings: ruleset, squash-only merges, auto-merge, secret scanning and push
   protection, private vulnerability reporting, a warning before the release token expires.
 
+## Install
+
+In Claude Code:
+
+```
+/plugin install nabu --marketplace ilien-dev/nabu
+```
+
+Then ask your agent to set up or audit a repository ("get this repo ready for contributors",
+"audit this repo against my standard"). Agents that read `.agents/skills` can use
+`skills/nabu/` directly.
+
 ## Commands
 
 ```
-node scripts/nabu.mjs detect       --repo <dir>   # what the repository has today
-node scripts/nabu.mjs init         --repo <dir> --answers answers.json
-node scripts/nabu.mjs render       --repo <dir> [--check] [--remove-obsolete]
-node scripts/nabu.mjs verify       --repo <dir>   # self-tests of the result
-node scripts/nabu.mjs scan-secrets --repo <dir>   # before going public
-node scripts/nabu.mjs github       --repo <dir> [--dry-run] [--public]
-node scripts/nabu.mjs audit        --repo <dir>   # every difference from the standard
+node skills/nabu/scripts/nabu.mjs detect       --repo <dir>   # what the repository has today
+node skills/nabu/scripts/nabu.mjs init         --repo <dir> --answers answers.json
+node skills/nabu/scripts/nabu.mjs render       --repo <dir> [--check] [--remove-obsolete]
+node skills/nabu/scripts/nabu.mjs verify       --repo <dir>   # self-tests of the result
+node skills/nabu/scripts/nabu.mjs scan-secrets --repo <dir>   # before going public
+node skills/nabu/scripts/nabu.mjs github       --repo <dir> [--dry-run] [--public]
+node skills/nabu/scripts/nabu.mjs audit        --repo <dir>   # every difference from the standard
 ```
 
-`SKILL.md` is the order an agent follows; `references/` explains the answers file, the PR
+`skills/nabu/SKILL.md` is the order an agent follows; `skills/nabu/references/` explains the answers file, the PR
 format and versioning by release kind (Claude Code plugin, npm, desktop, mobile, library).
 
 ## Requirements

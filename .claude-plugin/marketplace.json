@@ -1,0 +1,19 @@
+{
+  "name": "nabu",
+  "owner": {
+    "name": "jjimenezc",
+    "url": "https://github.com/ilien-dev"
+  },
+  "metadata": {
+    "description": "Marketplace for the Nabu plugin."
+  },
+  "plugins": [
+    {
+      "name": "nabu",
+      "source": "./",
+      "description": "Open-source setup and audit for GitHub repositories, checked by scripts.",
+      "category": "productivity",
+      "tags": ["open-source", "contributing", "github", "release-please"]
+    }
+  ]
+}
