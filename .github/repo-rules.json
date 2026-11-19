@@ -1,0 +1,72 @@
+{
+  "name": "Nabu",
+  "repo": "ilien-dev/nabu",
+  "defaultBranch": "main",
+  "purpose": "gets a GitHub repository ready for outside contributors, or audits one, against a single standard checked by scripts.",
+  "shipped": [
+    "skills/**",
+    ".claude-plugin/**"
+  ],
+  "visual": [],
+  "issueFirst": false,
+  "measured": {
+    "enabled": true,
+    "types": [
+      "feat",
+      "fix",
+      "perf"
+    ],
+    "methods": [
+      "What the skill does: the cases in `evals/evals.json`, each run with the skill from main and with yours; pass rate of both.",
+      "A fix in a script or template: the test in `tests/run.mjs` that fails on main and passes on your branch."
+    ]
+  },
+  "commands": [
+    "node tests/run.mjs"
+  ],
+  "ci": {
+    "requiredChecks": [
+      "Tests (Node 18)"
+    ]
+  },
+  "release": {
+    "kind": "claude-plugin",
+    "currentVersion": "0.1.0",
+    "versionFiles": [
+      {
+        "path": ".claude-plugin/plugin.json",
+        "jsonpath": "$.version"
+      }
+    ],
+    "build": [],
+    "buildSecrets": [],
+    "npmPrepare": [],
+    "bootstrapSha": "e4434a9a4faa4c25cec9907f39fb1f4fa9615479"
+  },
+  "standard": 1,
+  "branch": {
+    "types": [
+      "feat",
+      "fix",
+      "perf",
+      "refactor",
+      "docs",
+      "test",
+      "build",
+      "ci",
+      "chore",
+      "style",
+      "revert"
+    ],
+    "maxWords": 5
+  },
+  "title": {
+    "max": 72
+  },
+  "releaseTypes": [
+    "feat",
+    "fix",
+    "perf",
+    "revert"
+  ]
+}
