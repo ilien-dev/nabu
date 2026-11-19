@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/ilien-dev/nabu/compare/v0.2.0...v0.2.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* keep the measured example in answers.md generic ([#5](https://github.com/ilien-dev/nabu/issues/5)) ([2b4a0de](https://github.com/ilien-dev/nabu/commit/2b4a0de59c66675ad8c017e6ebdb3796d61e4883))
+
 ## [0.2.0](https://github.com/ilien-dev/nabu/compare/v0.1.0...v0.2.0) (2026-11-19)
 
 
