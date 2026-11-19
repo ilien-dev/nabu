@@ -1,0 +1,26 @@
+{
+  "skill_name": "nabu",
+  "evals": [
+    {
+      "id": 1,
+      "name": "npm-library-setup",
+      "prompt": "I want to open-source this repo (parsekit, an npm library). Get it ready for contributors: protect main, contribution rules, a PR format, a skill for agents, automatic versions and publishing to npm. It promises no metrics, so changes need no measuring; it is not a website. Decide what is reasonable without asking me. You may make the repo public if it is safe.",
+      "expected_output": "repo-rules.json, CONTRIBUTING.md, PR template, uncontributing skill in .claude and .agents, check-pr.cjs, pr-rules.yml, release.yml with release-please and an npm trusted-publishing job, release-please config with package.json; secret scan before making it public; ruleset deferred until the workflows are on main; RELEASE_TOKEN and npm trusted publisher handed to the user.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "audit-old-setup",
+      "prompt": "This repo (eco, a Claude Code plugin) already had collaboration rules from an earlier version. Audit it against my standard and leave it the same as my other repos. Changes to the skills are measured with the evals in evals/; brand/ is visual. Do not open PRs, just leave the changes ready in the working tree.",
+      "expected_output": "Audit lists the differences; repo-rules.json written from the existing CONTRIBUTING; obsolete files removed (pr-title.yml, protect-main.json, check-pr.js); release-please replaces any Cocogitto setup; eco.py version lines annotated; CLAUDE.md/AGENTS.md point to the skill and stay identical; tests still pass; no PR opened.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "website-issue-first",
+      "prompt": "This repo is my tool's website and lives as a submodule of the main repo. Set it up for collaboration with my standard. Every change to the site has to start with an issue. It publishes no versions.",
+      "expected_output": "issueFirst on, release kind none, visual globs for html/css, pr-rules closes PRs without an open linked issue, CONTRIBUTING says every change starts with an issue, accepted label planned, no release workflow.",
+      "files": []
+    }
+  ]
+}

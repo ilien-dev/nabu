@@ -1,0 +1,135 @@
+name: Release
+
+# Nobody writes a version number and nobody cuts a release by hand. On every push to
+# {{defaultBranch}}, release-please reads the commits since the last release (each one the title of
+# a squash-merged pull request) and opens or updates "chore({{defaultBranch}}): release X.Y.Z" with the
+# next version in every file of release-please-config.json and the new section of
+# CHANGELOG.md. This workflow merges that pull request at once and runs release-please again,
+# which creates the tag and the GitHub Release.
+# {{releaseSummary}}
+#
+# Everything runs with RELEASE_TOKEN, a fine-grained token of a repository admin (Contents
+# and Pull requests: read and write). With the default token the release pull request is
+# opened by a bot whose checks wait for approval and which cannot merge past the ruleset; the
+# admin token opens it like a person does and merges it with --admin, which the ruleset lets
+# admins do. token-check.yml warns before it expires.
+# Managed by Nabu (https://github.com/ilien-dev/nabu); do not edit by hand.
+
+on:
+  push:
+    branches: [{{defaultBranch}}]
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    outputs:
+      created: ${{ steps.publish.outputs.release_created }}
+      tag: ${{ steps.publish.outputs.tag_name }}
+      version: ${{ steps.publish.outputs.version }}
+    steps:
+      - name: Open or update the release pull request
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Merge the release pull request
+        id: merge
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          pr=$(gh pr list --repo "$REPO" --state open --label "autorelease: pending" --json number --jq '.[0].number')
+          if [ -z "$pr" ]; then
+            echo "Nothing to release."
+            exit 0
+          fi
+          gh pr merge "$pr" --repo "$REPO" --squash --admin --delete-branch
+          echo "merged=true" >> "$GITHUB_OUTPUT"
+
+      - name: Publish the tag and the GitHub Release
+        id: publish
+        if: steps.merge.outputs.merged == 'true'
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          skip-github-pull-request: true
+{{#build}}
+
+  # Builds each target from the release tag and attaches what it produces to the Release.
+  # VERSION is the released version; VERSION_CODE is the same version as one integer
+  # (major * 1000000 + minor * 1000 + patch), for stores that want a number that only grows.
+  build:
+    name: Build (${{ matrix.name }})
+    needs: release
+    if: needs.release.outputs.created == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+{{buildMatrix}}
+    runs-on: ${{ matrix.os }}
+    env:
+      TAG: ${{ needs.release.outputs.tag }}
+      VERSION: ${{ needs.release.outputs.version }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+
+      - name: Version code
+        shell: bash
+        run: |
+          IFS=. read -r major minor patch <<< "${VERSION%%-*}"
+          echo "VERSION_CODE=$(( major * 1000000 + minor * 1000 + patch ))" >> "$GITHUB_ENV"
+
+      - name: Build
+        shell: bash
+{{buildSecrets}}
+        run: ${{ matrix.run }}
+
+      - name: Attach to the Release
+        shell: bash
+        run: gh release upload "$TAG" ${{ matrix.artifacts }} --clobber
+{{/build}}
+{{#npm}}
+
+  # Publishes to npm with trusted publishing: npmjs.com trusts this workflow through OIDC, so
+  # no npm token is stored, and the package carries a provenance statement.
+  npm:
+    name: Publish to npm
+    needs: release
+    if: needs.release.outputs.created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5 or later.
+      - run: npm install -g npm@latest
+{{npmPrepare}}
+      - run: npm publish --provenance --access public
+{{/npm}}
