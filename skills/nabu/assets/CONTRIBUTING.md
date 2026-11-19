@@ -122,8 +122,8 @@ it holds what a reviewer needs to decide quickly, and nothing else.
 | **Evidence** | 300 characters of text | How you checked it, how a reviewer can check it; screenshots. |
 | **Checklist** | — | Every box ticked. |
 
-**Screenshots** are always welcome, one or as many as it takes to make the change easy to
-understand, and required for a visual change{{visualSuffix}}: before and after. Take them yourself
+**Screenshots** are optional and always welcome, one or as many as it takes to make the change
+easy to understand; for a visual change, before and after. Take them yourself
 or ask your agent to; capture only that window or page, never the whole screen. Drag the files
 into the description box on GitHub. Images, GIFs and links do not count toward the limit.
 

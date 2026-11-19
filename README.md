@@ -13,7 +13,7 @@ automatic with release-please. A script does that work, not the agent's reading 
 - A PR format a maintainer can review fast: What, Why, How, Risk, Measurement (optional),
   Evidence, Checklist, each with a character limit.
 - A `PR rules` check that enforces all of it, plus: changes to what users install must
-  publish a version, visual changes need a screenshot, measured repositories need numbers,
+  publish a version, measured repositories need numbers,
   and website repositories close any PR that does not start from an issue.
 - Versions nobody writes by hand: `feat` raises the minor number, `fix`/`perf`/`revert` the
   patch, `!` the major. Release builds for desktop and mobile, and npm publishing with

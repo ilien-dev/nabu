@@ -30,7 +30,7 @@ Required for {{measuredTypes}} changes to what users get. Otherwise "Not applica
 <!--
 At most 300 characters of text; images, GIFs and links do not count.
 How you checked it, and how a reviewer can check it in a minute (a command, a page, a step).
-Screenshots are always welcome and required for a visual change: before and after.
+Screenshots are optional and always welcome; for a visual change, before and after.
 Capture only that window or page, never the whole screen. Drag the files into this box on GitHub.
 -->
 
