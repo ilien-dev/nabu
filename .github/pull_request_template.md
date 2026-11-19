@@ -17,13 +17,6 @@ Comments like this one are removed before the limits are counted.
 ## Risk
 <!-- At most 200 characters. What could break, and how to undo it. "None: <reason>" when nothing can. -->
 
-## Measurement
-<!--
-At most 500 characters. The numbers on main and on this branch, before -> after: they must
-show the change adds value, or at least that nothing gets worse. How to measure here: CONTRIBUTING.md.
-Required for `feat`, `fix` or `perf` changes to what users get. Otherwise "Not applicable:" and the reason.
--->
-
 ## Evidence
 <!--
 At most 300 characters of text; images, GIFs and links do not count.
