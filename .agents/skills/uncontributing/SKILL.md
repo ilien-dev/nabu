@@ -1,6 +1,6 @@
 ---
 name: uncontributing
-description: Use before opening an issue, creating a branch, committing for a pull request, or writing a pull request title or description in the Nabu repository (ilien-dev/nabu), even when the user only says "open a PR", "send this upstream" or "make a branch". Walks through CONTRIBUTING.md (one change per PR, <type>/ branch names, Conventional Commit titles that decide the version, the short PR format, measured changes, screenshots) and checks the result with .github/scripts/check-pr.cjs.
+description: Use before opening an issue, creating a branch, committing for a pull request, or writing a pull request title or description in the Nabu repository (ilien-dev/nabu), even when the user only says "open a PR", "send this upstream" or "make a branch". Walks through CONTRIBUTING.md (one change per PR, <type>/ branch names, Conventional Commit titles that decide the version, the short PR format, screenshots) and checks the result with .github/scripts/check-pr.cjs.
 ---
 
 # Contributing to Nabu
@@ -23,18 +23,6 @@ out the difference. The check script decides, not this text: run it.
 
 Name the single change in one sentence. If it needs an "and", it is two PRs. Propose the split
 to the user and do the first one. Unrelated fixes you notice: mention them, leave them out.
-
-## 3. Measure first
-
-A `feat`, `fix` or `perf` change to what users get goes in only when the numbers show it adds value or
-at least that nothing gets worse. Take the reading on `main` before changing code, since
-it is lost afterwards. How to measure here:
-
-- What the skill does: the cases in `evals/evals.json`, each run with the skill from main and with yours; pass rate of both.
-- A fix in a script or template: the test in `tests/run.mjs` that fails on main and passes on your branch.
-
-If nothing can show the effect, tell the user the change will likely be declined, before doing
-the work.
 
 ## Branch and title
 
@@ -64,7 +52,6 @@ sentences: what changed, not how hard it was. No other headings, no summary at t
 
 - **What** (280): the one change. **Why** (280): the problem; `Closes #N`.
 - **How** (500): the approach and main files. **Risk** (200): what could break, how to undo it.
-- **Measurement** (500): `main` → branch, with numbers.
 - **Evidence** (300 of text): how you checked it and how the reviewer can, in a minute.
 - **Checklist**: tick only what is true; if one is not, say why instead of ticking it.
 

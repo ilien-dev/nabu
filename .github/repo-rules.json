@@ -10,16 +10,13 @@
   "visual": [],
   "issueFirst": false,
   "measured": {
-    "enabled": true,
+    "enabled": false,
     "types": [
       "feat",
       "fix",
       "perf"
     ],
-    "methods": [
-      "What the skill does: the cases in `evals/evals.json`, each run with the skill from main and with yours; pass rate of both.",
-      "A fix in a script or template: the test in `tests/run.mjs` that fails on main and passes on your branch."
-    ]
+    "methods": []
   },
   "commands": [
     "node tests/run.mjs"

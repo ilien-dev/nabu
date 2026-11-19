@@ -71,19 +71,6 @@ release after every merge. Do not edit version numbers or `CHANGELOG.md`.
 A change to what users install (`skills/**` and `.claude-plugin/**`) has to publish a version, or they never get it:
 its title must be `feat`, `fix`, `perf` or `revert`. The check rejects any other type for those files.
 
-## Every change to what users get is measured
-
-A new feature, a fix or a change to how something works goes in only when it is measured and the
-numbers show it adds value, or at least that nothing gets worse. A change that cannot be measured
-is declined, however good it looks. Put the result on `main` and on your branch in the
-**Measurement** section of the PR. How to measure here:
-
-- What the skill does: the cases in `evals/evals.json`, each run with the skill from main and with yours; pass rate of both.
-- A fix in a script or template: the test in `tests/run.mjs` that fails on main and passes on your branch.
-
-For `feat`, `fix` or `perf` changes to what users get, Measurement cannot say "not applicable". For any
-other change it can, with the reason (`Not applicable: docs only`).
-
 ## Description
 
 Start from the template GitHub fills in
@@ -96,7 +83,6 @@ it holds what a reviewer needs to decide quickly, and nothing else.
 | **Why** | 280 characters | The problem it solves. Link the issue (`Closes #12`). |
 | **How** | 500 characters | The approach, and the main files it touches. |
 | **Risk** | 200 characters | What could break, and how to undo it. |
-| **Measurement** | 500 characters | The numbers before and after (see above). |
 | **Evidence** | 300 characters of text | How you checked it, how a reviewer can check it; screenshots. |
 | **Checklist** | — | Every box ticked. |
 

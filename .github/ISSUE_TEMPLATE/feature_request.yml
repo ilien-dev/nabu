@@ -20,13 +20,6 @@ body:
       label: What you propose
     validations:
       required: true
-  - type: textarea
-    id: measure
-    attributes:
-      label: How it would be measured
-      description: The number that should move, and how to read it before and after.
-    validations:
-      required: true
   - type: checkboxes
     id: checks
     attributes:
