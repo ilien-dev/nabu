@@ -1,7 +1,7 @@
 {
   "name": "nabu",
   "displayName": "Nabu",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Gets a GitHub repository ready for outside contributors, or audits one against a single standard: protected default branch, typed branch names, CONTRIBUTING.md, a short PR format, an agent contribution skill and automatic releases with release-please. Scripts do the work, for any language.",
   "author": {
     "name": "jjimenezc",
