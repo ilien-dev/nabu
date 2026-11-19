@@ -31,7 +31,6 @@ const SECTIONS = [
 ];
 
 const NOT_APPLICABLE = /^\s*not applicable:\s*\S/i;
-const IMAGE = /!\[[^\]]*\]\([^)]+\)|<img\b|<video\b|https:\/\/github\.com\/user-attachments\/\S+/i;
 
 function loadRules(file = RULES_FILE) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -127,7 +126,6 @@ function check(rules, { branch = '', title = '', body = '', files = [], author =
   const type = tm ? tm[1] : null;
   const breaking = tm ? Boolean(tm[3]) : false;
   const shipped = files.filter((f) => matchesAny(f, rules.shipped));
-  const visual = files.filter((f) => matchesAny(f, rules.visual));
   const releases = type && (breaking || rules.releaseTypes.includes(type));
 
   // A change to what users install has to publish a version, or they never receive it.
@@ -168,9 +166,6 @@ function check(rules, { branch = '', title = '', body = '', files = [], author =
       }
     } else if (name === 'Measurement' && !/\d/.test(text) && !NOT_APPLICABLE.test(text)) {
       problems.push('"## Measurement" needs numbers, or "Not applicable:" and the reason.');
-    }
-    if (name === 'Evidence' && visual.length > 0 && !IMAGE.test(text)) {
-      problems.push(`This PR changes something visible (${visual[0]}): "## Evidence" needs a screenshot or GIF, before and after.`);
     }
   }
 

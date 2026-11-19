@@ -7,7 +7,6 @@
     "skills/**",
     ".claude-plugin/**"
   ],
-  "visual": [],
   "issueFirst": false,
   "measured": {
     "enabled": false,

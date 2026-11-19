@@ -9,6 +9,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { renderTemplate, normalizeRules } from '../skills/nabu/scripts/nabu.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -75,9 +76,9 @@ const kinds = [
   ['npmlib', { 'package.json': '{"name":"x","version":"1.2.0","type":"module","repository":{"url":"git+https://github.com/nabu-test-sandbox/npmlib.git"}}\n' },
     { shipped: ['src/**', 'package.json'], commands: ['npm test'], release: { kind: 'npm', currentVersion: '1.2.0', versionFiles: [{ path: 'package.json' }], npmPrepare: ['npm test'] } }],
   ['desktop', { 'Cargo.toml': '[package]\nname = "app"\nversion = "0.4.0"\n' },
-    { shipped: ['src/**'], visual: ['ui/**'], release: { kind: 'desktop', releaseType: 'rust', currentVersion: '0.4.0', versionFiles: [{ path: 'Cargo.toml', jsonpath: '$.package.version' }],
+    { shipped: ['src/**'], release: { kind: 'desktop', releaseType: 'rust', currentVersion: '0.4.0', versionFiles: [{ path: 'Cargo.toml', jsonpath: '$.package.version' }],
       build: [{ name: 'Windows', os: 'windows-latest', run: 'cargo build --release', artifacts: 'target/release/app.exe' }] } }],
-  ['site', { 'index.html': '<h1>x</h1>\n' }, { visual: ['**/*.html'], issueFirst: true, release: { kind: 'none' } }],
+  ['site', { 'index.html': '<h1>x</h1>\n' }, { issueFirst: true, release: { kind: 'none' } }],
 ];
 for (const [name, files, extra] of kinds) {
   const dir = repo(name, files);
@@ -93,6 +94,14 @@ for (const [name, files, extra] of kinds) {
   const releaseYml = path.join(dir, '.github/workflows/release.yml');
   check(`${name}: release workflow only when it releases`, fs.existsSync(releaseYml) === (extra.release.kind !== 'none'));
   if (name === 'site') check('site: CONTRIBUTING says every change starts with an issue', /Every change starts with an issue/.test(contributing));
+  if (name === 'site') {
+    // Screenshots are optional, even in a repository whose rules still list visual globs.
+    const { check: checkPr } = createRequire(import.meta.url)(path.join(dir, '.github/scripts/check-pr.cjs'));
+    const fileRules = { ...JSON.parse(fs.readFileSync(path.join(dir, '.github/repo-rules.json'), 'utf8')), visual: ['**/*.html'] };
+    const body = '## What\nA new color.\n\n## Why\nCloses #1.\n\n## How\nOne file.\n\n## Risk\nNone: one file.\n\n## Evidence\nOpened the page.\n\n## Checklist\n- [x] done';
+    const got = checkPr(fileRules, { branch: 'style/new-color', title: 'style: new color', body, files: ['index.html'] });
+    check('site: a visual change without a screenshot passes', got.length === 0, got.join('; '));
+  }
   if (name === 'npmlib') check('npmlib: npm job with provenance', /npm publish --provenance/.test(fs.readFileSync(releaseYml, 'utf8')));
 }
 

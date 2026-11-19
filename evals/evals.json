@@ -19,7 +19,7 @@
       "id": 3,
       "name": "website-issue-first",
       "prompt": "This repo is my tool's website and lives as a submodule of the main repo. Set it up for collaboration with my standard. Every change to the site has to start with an issue. It publishes no versions.",
-      "expected_output": "issueFirst on, release kind none, visual globs for html/css, pr-rules closes PRs without an open linked issue, CONTRIBUTING says every change starts with an issue, accepted label planned, no release workflow.",
+      "expected_output": "issueFirst on, release kind none, pr-rules closes PRs without an open linked issue, CONTRIBUTING says every change starts with an issue, accepted label planned, no release workflow.",
       "files": []
     }
   ]

@@ -54,8 +54,7 @@ message, only what you could not infer, and always these three:
 3. **Is this a website kept as a submodule of a main project?** Those repos get `issueFirst`:
    a PR without `Closes #N` to an open issue is closed automatically.
 
-Also confirm `shipped` (paths that reach users) and `visual` (paths whose change needs a
-screenshot). If there is no LICENSE, ask which one; never choose for the user.
+Also confirm `shipped` (paths that reach users). If there is no LICENSE, ask which one; never choose for the user.
 
 ### 3. Write the rules and the files
 

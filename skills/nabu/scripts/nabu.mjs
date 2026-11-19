@@ -132,7 +132,7 @@ export function normalizeRules(input) {
   r.title = { max: STANDARD.titleMax };
   r.releaseTypes = [...STANDARD.releaseTypes];
   r.shipped = r.shipped || [];
-  r.visual = r.visual || [];
+  delete r.visual; // screenshots are optional: no path requires one
   r.issueFirst = Boolean(r.issueFirst);
   r.commands = r.commands || [];
   r.ci = { requiredChecks: (r.ci && r.ci.requiredChecks) || [] };
@@ -250,7 +250,6 @@ function context(rules, repo) {
     hasShipped: rules.shipped.length > 0,
     shippedList: list(rules.shipped, 'and'),
     releaseTypesList: list(rules.releaseTypes),
-    visualSuffix: rules.visual.length ? ` (anything in ${list(rules.visual)})` : '',
     commandsList: commands.length ? `\`\`\`\n${commands.join('\n')}\n\`\`\`\n\nEvery command must pass${rules.ci.requiredChecks.length ? '; CI runs them again on the pull request' : ''}.` : 'There is nothing to run locally; the PR rules check runs on the pull request.',
     releases: rel.kind !== 'none',
     checklistCommands: commands.map((c) => `- [ ] \`${c}\` passes\n`).join(''),
@@ -623,10 +622,6 @@ function verify(repoDir) {
     cases.push(['docs on shipped files fails', { branch: 'docs/reword-skill', title: 'docs: reword', body: sample(), files: [shippedFile] }, false]);
     cases.push(['fix on shipped files passes', { branch: 'fix/reword-skill', title: 'fix: reword', body: sample(), files: [shippedFile] }, true]);
     if (rules.measured.enabled) cases.push(['feat on shipped files without numbers fails', { branch: 'feat/new-check', title: 'feat: new check', body: sample({ Measurement: 'Not applicable: small.' }), files: [shippedFile] }, false]);
-  }
-  if (rules.visual.length) {
-    const vis = sampleFor(rules.visual[0]);
-    cases.push(['a visual change without a screenshot fails', { branch: 'style/new-color', title: 'style: new color', body: sample({ Evidence: 'Looks better.' }), files: [vis] }, false]);
   }
   if (rules.issueFirst) cases.push(['no linked issue fails', { branch: 'fix/typo-home', title: 'fix: typo', body: sample({ Why: 'A typo.' }), files: [] }, false]);
   for (const [label, input, shouldPass] of cases) {

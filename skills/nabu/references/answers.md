@@ -11,7 +11,6 @@ if you set them.
   "defaultBranch": "main",
   "purpose": "finds the words people search for and puts them where search engines read them.",
   "shipped": ["skills/**", "shared/**", ".claude-plugin/**"],
-  "visual": ["brand/**"],
   "issueFirst": false,
   "measured": {
     "enabled": true,
@@ -37,7 +36,6 @@ if you set them.
   ("Eco finds..."), ending in a period. It is printed in CONTRIBUTING.md, the issue forms and
   the agent skill as the scope every contribution is judged against.
 - `shipped`: globs of what users install or run. Changes there must release a version.
-- `visual`: globs whose change needs a screenshot in Evidence. Leave empty if nothing is visual.
 - `measured`: optional; `enabled: false` when changes need no numbers. `methods` are the
   project's own words for how it measures (tests, benchmarks, evals...), whatever fits it.
 - `commands`: what a contributor runs before pushing; each becomes a checklist box.
