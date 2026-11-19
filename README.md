@@ -29,9 +29,14 @@ In Claude Code:
 /plugin install nabu --marketplace ilien-dev/nabu
 ```
 
-Then ask your agent to set up or audit a repository ("get this repo ready for contributors",
-"audit this repo against my standard"). Agents that read `.agents/skills` can use
-`skills/nabu/` directly.
+Then run one of the plugin's commands, or just ask your agent ("get this repo ready for
+contributors", "audit this repo against my standard"):
+
+- `/nabu:setup [repo-dir]` sets up the repository (the current directory by default).
+- `/nabu:audit [repo-dir]` lists every difference from the standard and fixes them once you
+  agree.
+
+Agents that read `.agents/skills` can use `skills/nabu/` directly.
 
 ## Commands
 
