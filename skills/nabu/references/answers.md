@@ -16,8 +16,8 @@ if you set them.
   "measured": {
     "enabled": true,
     "methods": [
-      "What a skill does: the cases in `evals/*.json`, pass rate with the skill from main and with yours.",
-      "A fix in a script: the test that fails on main and passes on your branch."
+      "A fix: the test that fails on main and passes on your branch.",
+      "A change in speed: `python tests/bench.py` on main and on your branch."
     ]
   },
   "commands": ["python tests/run.py"],
@@ -38,6 +38,8 @@ if you set them.
   the agent skill as the scope every contribution is judged against.
 - `shipped`: globs of what users install or run. Changes there must release a version.
 - `visual`: globs whose change needs a screenshot in Evidence. Leave empty if nothing is visual.
+- `measured`: optional; `enabled: false` when changes need no numbers. `methods` are the
+  project's own words for how it measures (tests, benchmarks, evals...), whatever fits it.
 - `commands`: what a contributor runs before pushing; each becomes a checklist box.
 - `ci.requiredChecks`: the project's own CI job names exactly as GitHub reports them
   (expand matrix names: `Tests (Python 3.9, ubuntu-24.04)`). `PR rules` is always added.
