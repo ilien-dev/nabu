@@ -77,7 +77,8 @@ const kinds = [
     { shipped: ['src/**', 'package.json'], commands: ['npm test'], release: { kind: 'npm', currentVersion: '1.2.0', versionFiles: [{ path: 'package.json' }], npmPrepare: ['npm test'] } }],
   ['desktop', { 'Cargo.toml': '[package]\nname = "app"\nversion = "0.4.0"\n' },
     { shipped: ['src/**'], release: { kind: 'desktop', releaseType: 'rust', currentVersion: '0.4.0', versionFiles: [{ path: 'Cargo.toml', jsonpath: '$.package.version' }],
-      build: [{ name: 'Windows', os: 'windows-latest', run: 'cargo build --release', artifacts: 'target/release/app.exe' }] } }],
+      build: [{ name: 'Windows', os: 'windows-latest', run: 'cargo build --release', artifacts: 'target/release/app.exe' }],
+      buildSecrets: ['SIGNING_KEY'], finish: ['node scripts/manifest.mjs "$VERSION" > latest.json', 'gh release upload "$TAG" latest.json --clobber'] } }],
   ['site', { 'index.html': '<h1>x</h1>\n' }, { issueFirst: true, release: { kind: 'none' } }],
 ];
 for (const [name, files, extra] of kinds) {
@@ -103,7 +104,24 @@ for (const [name, files, extra] of kinds) {
     check('site: a visual change without a screenshot passes', got.length === 0, got.join('; '));
   }
   if (name === 'npmlib') check('npmlib: npm job with provenance', /npm publish --provenance/.test(fs.readFileSync(releaseYml, 'utf8')));
+  if (extra.release.kind !== 'none') {
+    // A release is a draft until everything it carries is attached, then published at once.
+    const cfg = JSON.parse(fs.readFileSync(path.join(dir, 'release-please-config.json'), 'utf8')).packages['.'];
+    check(`${name}: release-please creates a draft with its tag`, cfg.draft === true && cfg['force-tag-creation'] === true, JSON.stringify(cfg));
+    const yml = fs.readFileSync(releaseYml, 'utf8');
+    const publish = yml.slice(yml.indexOf('\n  publish:'));
+    check(`${name}: a publish job makes the draft public and latest`, /gh release edit "\$TAG" .*--draft=false --latest/.test(publish), publish.slice(0, 400));
+    const needs = (publish.match(/needs: \[(.+)\]/) || [])[1] || '';
+    const want = ['release', ...(extra.release.build ? ['build'] : []), ...(extra.release.kind === 'npm' ? ['npm'] : [])];
+    check(`${name}: publish waits for every job that attaches or publishes`, needs === want.join(', '), needs);
+    if (extra.release.finish) {
+      check(`${name}: finish commands run before the release goes public`,
+        extra.release.finish.every((c) => publish.indexOf(c) > -1 && publish.indexOf(c) < publish.indexOf('--draft=false')));
+      check(`${name}: build secrets reach the build`, /SIGNING_KEY: \$\{\{ secrets\.SIGNING_KEY \}\}/.test(yml));
+    }
+  }
 }
+check('rules: finish commands must be strings', normalizeRules({ ...base, release: { kind: 'library', currentVersion: '1.0.0', finish: [{ run: 'x' }] } }).problems.length > 0);
 
 // ---- verify catches what it promises to catch
 const noRepo = repo('npm-no-repository', { 'package.json': '{"name":"x","version":"1.0.0"}\n' });

@@ -41,5 +41,5 @@ if you set them.
 - `commands`: what a contributor runs before pushing; each becomes a checklist box.
 - `ci.requiredChecks`: the project's own CI job names exactly as GitHub reports them
   (expand matrix names: `Tests (Python 3.9, ubuntu-24.04)`). `PR rules` is always added.
-- `release`: see `versioning.md`. `currentVersion` is the version released today; the manifest
+- `release`: see `versioning.md` (`build`, `buildSecrets`, `npmPrepare`, `finish`). `currentVersion` is the version released today; the manifest
   starts there and release-please owns it afterwards.

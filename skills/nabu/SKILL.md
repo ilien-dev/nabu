@@ -25,7 +25,8 @@ identical.
 - PR format: What, Why, How, Risk, (Measurement), Evidence, Checklist, each with a limit
   (`references/pr-format.md` explains why each one is there).
 - Versions: nobody writes one. release-please opens and merges the release PR on every push to
-  the default branch. `feat` → minor, `fix`/`perf`/`revert` → patch, `!` → major, other types
+  the default branch; the Release is a draft until every build, npm and `finish` job succeeds,
+  then it is published as latest. `feat` → minor, `fix`/`perf`/`revert` → patch, `!` → major, other types
   release nothing. A PR that touches files users install (`shipped`) must use a releasing type.
 - The `PR rules` check (`check-pr.cjs`) runs on `pull_request_target` from the default
   branch, so forks are checked without approval and a PR cannot change the rules it is judged by.
