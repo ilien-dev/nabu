@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/ilien-dev/nabu/compare/v0.3.1...v0.4.0) (2026-11-20)
+
+
+### Features
+
+* let a project run its own release pipeline ([#15](https://github.com/ilien-dev/nabu/issues/15)) ([841b5ab](https://github.com/ilien-dev/nabu/commit/841b5ab469f619a036545fb03361ae3e0fbd1268))
+
 ## [0.3.1](https://github.com/ilien-dev/nabu/compare/v0.3.0...v0.3.1) (2026-11-20)
 
 
