@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/ilien-dev/nabu/compare/v0.2.3...v0.3.0) (2026-11-20)
+
+
+### Features
+
+* keep each release a draft until it is complete ([#11](https://github.com/ilien-dev/nabu/issues/11)) ([e397472](https://github.com/ilien-dev/nabu/commit/e397472c85ee98be5df44e8c6e2dd7a08a3f3839))
+
 ## [0.2.3](https://github.com/ilien-dev/nabu/compare/v0.2.2...v0.2.3) (2026-11-19)
 
 
