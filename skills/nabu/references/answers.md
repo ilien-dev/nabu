@@ -43,3 +43,4 @@ if you set them.
   (expand matrix names: `Tests (Python 3.9, ubuntu-24.04)`). `PR rules` is always added.
 - `release`: see `versioning.md` (`build`, `buildSecrets`, `npmPrepare`, `finish`). `currentVersion` is the version released today; the manifest
   starts there and release-please owns it afterwards.
+- `release`: `sync`, `beforePublish` and `afterPublish` are in `versioning.md` too.

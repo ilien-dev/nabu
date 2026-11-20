@@ -68,7 +68,8 @@ jobs:
             echo "Nothing to release."
             exit 0
           fi
-          gh pr merge "$pr" --repo "$REPO" --squash --admin --delete-branch
+          match=""
+          gh pr merge "$pr" --repo "$REPO" --squash --admin --delete-branch $match
           echo "merged=true" >> "$GITHUB_OUTPUT"
 
       - name: Publish the tag and the GitHub Release

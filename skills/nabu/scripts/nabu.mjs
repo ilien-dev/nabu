@@ -147,6 +147,14 @@ export function normalizeRules(input) {
   rel.npmPrepare = rel.npmPrepare || [];
   rel.finish = rel.finish || [];
   if (rel.finish.some((c) => typeof c !== 'string' || !c.trim())) problems.push('every "release.finish" entry must be a shell command');
+  rel.sync = rel.sync || [];
+  if (rel.sync.some((c) => typeof c !== 'string' || !c.trim())) problems.push('every "release.sync" entry must be a shell command');
+  for (const k of ['beforePublish', 'afterPublish']) {
+    if (!rel[k]) continue;
+    const w = rel[k].workflow || '';
+    if (!/^\.github\/workflows\/[\w.-]+\.ya?ml$/.test(w) || /\/release\.ya?ml$/.test(w)) problems.push(`"release.${k}.workflow" must be a workflow of .github/workflows other than release.yml`);
+    rel[k].permissions = rel[k].permissions || { contents: 'read' };
+  }
   if (rel.kind !== 'none') {
     if (!/^\d+\.\d+\.\d+/.test(rel.currentVersion || '')) problems.push('"release.currentVersion" must be the version released now, e.g. 0.2.0');
     if (rel.kind !== 'library' && rel.versionFiles.length === 0) problems.push('"release.versionFiles" must list the files that carry the version');
@@ -267,10 +275,22 @@ function context(rules, repo) {
     buildSecrets: rel.buildSecrets.length ? ['        env:', ...rel.buildSecrets.map((s) => `          ${s}: \${{ secrets.${s} }}`)].join('\n') : '',
     npm: rel.kind === 'npm',
     npmPrepare: rel.npmPrepare.map((c) => `      - run: ${c}`).join('\n'),
-    publishNeeds: ['release', ...(rel.build.length ? ['build'] : []), ...(rel.kind === 'npm' ? ['npm'] : [])].join(', '),
+    publishNeeds: ['release', ...(rel.build.length ? ['build'] : []), ...(rel.kind === 'npm' ? ['npm'] : []), ...(rel.beforePublish ? ['before-publish'] : [])].join(', '),
+    sync: rel.sync.length > 0,
+    syncSteps: rel.sync.map((c) => `          ${c}`).join('\n'),
+    beforePublish: Boolean(rel.beforePublish),
+    beforePublishWorkflow: rel.beforePublish ? rel.beforePublish.workflow : '',
+    beforePublishPermissions: rel.beforePublish ? permissionLines(rel.beforePublish.permissions) : '',
+    afterPublish: Boolean(rel.afterPublish),
+    afterPublishWorkflow: rel.afterPublish ? rel.afterPublish.workflow : '',
+    afterPublishPermissions: rel.afterPublish ? permissionLines(rel.afterPublish.permissions) : '',
     finish: rel.finish.length > 0,
     finishSteps: ['      - name: Finish', '        shell: bash', '        run: |', ...rel.finish.map((c) => `          ${c}`)].join('\n'),
   };
+}
+
+function permissionLines(perms) {
+  return Object.entries(perms).map(([k, v]) => `      ${k}: ${v}`).join('\n');
 }
 
 function releasePleaseConfig(rules, bootstrapSha) {
@@ -339,7 +359,9 @@ function expectedFiles(rules, repo) {
   const put = (rel, text) => files.set(rel, lf(text));
   put('.github/scripts/check-pr.cjs', asset('github/scripts/check-pr.cjs'));
   put('.github/workflows/pr-rules.yml', asset('github/workflows/pr-rules.yml'));
-  put('.github/pull_request_template.md', renderTemplate(asset('github/pull_request_template.md'), ctx));
+  const prNotesFile = path.join(repo, '.github', 'pull-request-notes.md');
+  const prNotes = fs.existsSync(prNotesFile) ? `\n${lf(fs.readFileSync(prNotesFile, 'utf8')).trim()}\n` : '';
+  put('.github/pull_request_template.md', renderTemplate(asset('github/pull_request_template.md'), ctx) + prNotes);
   for (const f of ['bug_report.yml', 'feature_request.yml', 'config.yml']) put(`.github/ISSUE_TEMPLATE/${f}`, renderTemplate(asset(`github/ISSUE_TEMPLATE/${f}`), ctx));
   put('.github/rulesets/default-branch.json', `${JSON.stringify(ruleset(rules), null, 2)}\n`);
   put('CONTRIBUTING.md', renderTemplate(asset('CONTRIBUTING.md'), ctx));
@@ -666,6 +688,14 @@ function verify(repoDir) {
       const text = fs.readFileSync(abs, 'utf8');
       if (f.type === 'generic') { if (!/x-release-please-(version|start-version)/.test(text)) problems.push(`${f.path} has no x-release-please-version annotation`); continue; }
       if (version && !text.includes(version)) problems.push(`${f.path} does not carry the manifest version ${version}`);
+    }
+    // release.yml calls these with the tag and the version; a workflow without workflow_call fails the release.
+    for (const k of ['beforePublish', 'afterPublish']) {
+      const w = rules.release[k] && rules.release[k].workflow;
+      if (!w) continue;
+      if (!exists(repoDir, w)) { problems.push(`release.${k}.workflow ${w} does not exist`); continue; }
+      const text = fs.readFileSync(path.join(repoDir, w), 'utf8');
+      if (!/^\s*workflow_call:/m.test(text) || !/^\s+tag:/m.test(text) || !/^\s+version:/m.test(text)) problems.push(`${w} must be callable: "on: workflow_call" with the inputs tag and version`);
     }
   }
   // npm provenance refuses a package whose repository.url is not the repository that publishes it.

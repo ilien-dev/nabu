@@ -75,7 +75,9 @@ Then, by hand (they are the project's own files):
 - `CLAUDE.md` and `AGENTS.md` get one line: `CONTRIBUTING.md` - branches, PR format and limits;
   load the `uncontributing` skill before a branch, commit, issue or PR. Keep them identical.
 - Project-specific contribution notes go in `.github/contributing-notes.md`; `render` copies it
-  into CONTRIBUTING.md. Never edit CONTRIBUTING.md directly.
+  into CONTRIBUTING.md. Never edit CONTRIBUTING.md directly. A section every PR must also carry
+  (a CLA acceptance line, a sign-off) goes in `.github/pull-request-notes.md`, appended to the
+  PR template after the Checklist.
 - Run the project's tests: the version annotations must not break anything.
 
 ### 4. Before the repository goes public

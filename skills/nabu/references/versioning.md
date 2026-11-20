@@ -15,6 +15,21 @@ rustup, the platform SDKs on macOS and Windows images) over extra actions.
 with `TAG`, `VERSION` and `GH_TOKEN` set. Use it for what needs every platform at once: an
 updater manifest built from all the signatures, checksums of every file.
 
+`sync`: shell commands run on the release pull request's branch before it is merged, for a
+version repeated in more places than `versionFiles` can reach (dependency pins, lockfiles, a
+manifest that embeds it in an identifier). Their changes are committed to that branch, so the
+tag carries them. Use the project's own sync script; keep `versionFiles` to the one source file.
+
+`beforePublish` / `afterPublish`: `{ "workflow": ".github/workflows/<file>.yml", "permissions":
+{...} }`, a project workflow with `on: workflow_call` and the string inputs `tag` and `version`,
+for a pipeline the kinds above cannot express (several registries, container images, package
+managers). `beforePublish` runs while the Release is a draft and `publish` waits for it: build and
+attach there. `afterPublish` runs once the Release is public: whatever downloads its files
+(Homebrew, Scoop, npm postinstall, a registry entry). Both get `secrets: inherit` and only the
+`permissions` listed. Check out `inputs.tag`, never the default ref: the workflow runs in the
+push that started the release, before the version commit. A publish from a called workflow
+counts as `release.yml` for npm and crates.io trusted publishing.
+
 `versionFiles` entry types: `.json` → `jsonpath` (default `$.version`); `.toml` → `jsonpath`
 such as `$.package.version`; `.yaml`/`.yml` → `jsonpath`; anything else → `"type": "generic"`
 with a `x-release-please-version` comment on the version line (`VERSION = '1.2.0'  #

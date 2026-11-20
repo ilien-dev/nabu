@@ -79,8 +79,22 @@ const kinds = [
     { shipped: ['src/**'], release: { kind: 'desktop', releaseType: 'rust', currentVersion: '0.4.0', versionFiles: [{ path: 'Cargo.toml', jsonpath: '$.package.version' }],
       build: [{ name: 'Windows', os: 'windows-latest', run: 'cargo build --release', artifacts: 'target/release/app.exe' }],
       buildSecrets: ['SIGNING_KEY'], finish: ['node scripts/manifest.mjs "$VERSION" > latest.json', 'gh release upload "$TAG" latest.json --clobber'] } }],
+  ['pipeline', {
+    'Cargo.toml': '[workspace]\nmembers = []\n\n[workspace.package]\nversion = "2.1.0"\n',
+    '.github/workflows/assets.yml': callable('assets'),
+    '.github/workflows/channels.yml': callable('channels'),
+    '.github/pull-request-notes.md': '## Agreement\n\nI agree to CLA.md.\n',
+  }, { shipped: ['crates/**'], release: { kind: 'library', currentVersion: '2.1.0',
+      versionFiles: [{ path: 'Cargo.toml', jsonpath: '$.workspace.package.version' }],
+      sync: ['python3 scripts/sync_version.py .', 'cargo update --workspace'],
+      beforePublish: { workflow: '.github/workflows/assets.yml', permissions: { contents: 'write', 'id-token': 'write' } },
+      afterPublish: { workflow: '.github/workflows/channels.yml', permissions: { contents: 'read', packages: 'write' } } } }],
   ['site', { 'index.html': '<h1>x</h1>\n' }, { issueFirst: true, release: { kind: 'none' } }],
 ];
+
+function callable(name) {
+  return `name: ${name}\non:\n  workflow_call:\n    inputs:\n      tag: { type: string, required: true }\n      version: { type: string, required: true }\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo\n`;
+}
 for (const [name, files, extra] of kinds) {
   const dir = repo(name, files);
   const a = answers(dir, { name, repo: `nabu-test-sandbox/${name}`, defaultBranch: 'main', purpose: `does ${name} things.`, ...extra });
@@ -103,6 +117,23 @@ for (const [name, files, extra] of kinds) {
     const got = checkPr(fileRules, { branch: 'style/new-color', title: 'style: new color', body, files: ['index.html'] });
     check('site: a visual change without a screenshot passes', got.length === 0, got.join('; '));
   }
+  if (name === 'pipeline') {
+    const yml = fs.readFileSync(releaseYml, 'utf8');
+    const merge = yml.indexOf('gh pr merge');
+    check('pipeline: sync commands run on the release PR before it is merged',
+      extra.release.sync.every((c) => yml.indexOf(c) > -1 && yml.indexOf(c) < merge) && /--match-head-commit/.test(yml), yml.slice(0, 300));
+    const before = yml.slice(yml.indexOf('\n  before-publish:'), yml.indexOf('\n  publish:'));
+    check('pipeline: the project workflow runs from the tag before the release is public',
+      /uses: \.\/\.github\/workflows\/assets\.yml/.test(before) && /tag: \$\{\{ needs\.release\.outputs\.tag \}\}/.test(before)
+        && /secrets: inherit/.test(before) && /id-token: write/.test(before), before);
+    const after = yml.slice(yml.indexOf('\n  after-publish:'));
+    check('pipeline: the project workflow for public channels runs after publish',
+      yml.includes('\n  after-publish:') && /uses: \.\/\.github\/workflows\/channels\.yml/.test(after) && /needs: \[release, publish\]/.test(after) && /packages: write/.test(after), after);
+    const template = fs.readFileSync(path.join(dir, '.github/pull_request_template.md'), 'utf8');
+    check('pipeline: pull-request-notes.md is appended to the PR template', /## Checklist[\s\S]*## Agreement\n\nI agree to CLA\.md\./.test(template), template.slice(-200));
+    fs.writeFileSync(path.join(dir, '.github/workflows/channels.yml'), 'name: channels\non: push\njobs: {}\n');
+    check('pipeline: verify fails when a project workflow cannot be called', /workflow_call/.test(nabu(dir, 'verify').out));
+  }
   if (name === 'npmlib') check('npmlib: npm job with provenance', /npm publish --provenance/.test(fs.readFileSync(releaseYml, 'utf8')));
   if (extra.release.kind !== 'none') {
     // A release is a draft until everything it carries is attached, then published at once.
@@ -112,7 +143,7 @@ for (const [name, files, extra] of kinds) {
     const publish = yml.slice(yml.indexOf('\n  publish:'));
     check(`${name}: a publish job makes the draft public and latest`, /gh release edit "\$TAG" .*--draft=false --latest/.test(publish), publish.slice(0, 400));
     const needs = (publish.match(/needs: \[(.+)\]/) || [])[1] || '';
-    const want = ['release', ...(extra.release.build ? ['build'] : []), ...(extra.release.kind === 'npm' ? ['npm'] : [])];
+    const want = ['release', ...(extra.release.build ? ['build'] : []), ...(extra.release.kind === 'npm' ? ['npm'] : []), ...(extra.release.beforePublish ? ['before-publish'] : [])];
     check(`${name}: publish waits for every job that attaches or publishes`, needs === want.join(', '), needs);
     if (extra.release.finish) {
       check(`${name}: finish commands run before the release goes public`,
@@ -121,6 +152,9 @@ for (const [name, files, extra] of kinds) {
     }
   }
 }
+check('rules: a project workflow is a file of .github/workflows other than release.yml',
+  normalizeRules({ ...base, release: { kind: 'library', currentVersion: '1.0.0', beforePublish: { workflow: '.github/workflows/release.yml' } } }).problems.length > 0);
+check('rules: sync commands must be strings', normalizeRules({ ...base, release: { kind: 'library', currentVersion: '1.0.0', sync: [1] } }).problems.length > 0);
 check('rules: finish commands must be strings', normalizeRules({ ...base, release: { kind: 'library', currentVersion: '1.0.0', finish: [{ run: 'x' }] } }).problems.length > 0);
 
 // ---- verify catches what it promises to catch
