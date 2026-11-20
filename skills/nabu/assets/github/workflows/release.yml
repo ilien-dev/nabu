@@ -41,6 +41,12 @@ jobs:
       tag: ${{ steps.publish.outputs.tag_name }}
       version: ${{ steps.publish.outputs.version }}
     steps:
+{{#sync}}
+      - uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+{{/sync}}
       - name: Open or update the release pull request
         id: rp
         uses: googleapis/release-please-action@v5
@@ -68,7 +74,22 @@ jobs:
             echo "Nothing to release."
             exit 0
           fi
-          gh pr merge "$pr" --repo "$REPO" --squash --admin --delete-branch
+          match=""
+{{#sync}}
+          # release-please writes the version only where release-please-config.json says; the
+          # project's sync commands write it everywhere else, on the release branch itself.
+          branch=$(gh pr view "$pr" --repo "$REPO" --json headRefName --jq .headRefName)
+          git fetch origin "$branch"
+          git checkout -B "$branch" FETCH_HEAD
+{{syncSteps}}
+          git add -A
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "chore: write the version into every file that repeats it"
+            git push origin "HEAD:$branch"
+          fi
+          match="--match-head-commit $(git rev-parse HEAD)"
+{{/sync}}
+          gh pr merge "$pr" --repo "$REPO" --squash --admin --delete-branch $match
           echo "merged=true" >> "$GITHUB_OUTPUT"
 
       - name: Publish the tag and the GitHub Release
@@ -146,6 +167,22 @@ jobs:
 {{npmPrepare}}
       - run: npm publish --provenance --access public
 {{/npm}}
+{{#beforePublish}}
+
+  # The project's own workflow, run from the tag while the Release is still a draft: what it
+  # attaches is there before anyone can see the Release. It receives the tag and the version.
+  before-publish:
+    name: Before publishing
+    needs: release
+    if: needs.release.outputs.created == 'true'
+    permissions:
+{{beforePublishPermissions}}
+    uses: ./{{beforePublishWorkflow}}
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+      version: ${{ needs.release.outputs.version }}
+    secrets: inherit
+{{/beforePublish}}
 
   # Makes the draft public and latest once every job above has succeeded.
   publish:
@@ -168,3 +205,19 @@ jobs:
 
 {{/finish}}
       - run: gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+{{#afterPublish}}
+
+  # The project's own workflow for what needs the Release public first: package managers and
+  # registries that download its files. A failure here leaves the Release public; re-run it.
+  after-publish:
+    name: After publishing
+    needs: [release, publish]
+    if: needs.release.outputs.created == 'true'
+    permissions:
+{{afterPublishPermissions}}
+    uses: ./{{afterPublishWorkflow}}
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+      version: ${{ needs.release.outputs.version }}
+    secrets: inherit
+{{/afterPublish}}
