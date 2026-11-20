@@ -2,10 +2,18 @@
 
 The flow is the same for every kind: release-please with `release-type: simple` reads the
 squash-merged titles, writes the version into each `versionFiles` entry, updates CHANGELOG.md,
-and `release.yml` merges its release PR and publishes the tag and GitHub Release. Only two
-things change per kind: which files carry the version, and what runs after the release
-(`build` targets or the npm job). Prefer what the runner already has (bash, node, python,
+and `release.yml` merges its release PR and creates the tag and the GitHub Release **as a
+draft**. The `build` targets and the npm job run from the tag; the `finish` commands run
+once after all of them; only then does the `publish` job make the Release public and latest.
+A failed job leaves the draft, so nobody downloads or updates to an incomplete release; "Re-run
+failed jobs" on that same run finishes it (a new run would release nothing). Only
+three things change per kind: which files carry the version, the jobs that run from the tag
+(`build` or npm), and `finish`. Prefer what the runner already has (bash, node, python,
 rustup, the platform SDKs on macOS and Windows images) over extra actions.
+
+`finish`: shell commands run from the tag after every `build` target has attached its files,
+with `TAG`, `VERSION` and `GH_TOKEN` set. Use it for what needs every platform at once: an
+updater manifest built from all the signatures, checksums of every file.
 
 `versionFiles` entry types: `.json` → `jsonpath` (default `$.version`); `.toml` → `jsonpath`
 such as `$.package.version`; `.yaml`/`.yml` → `jsonpath`; anything else → `"type": "generic"`
@@ -44,7 +52,11 @@ x-release-please-version`).
   ```
 - `buildSecrets`: names of signing secrets the build reads (e.g. `TAURI_SIGNING_PRIVATE_KEY`);
   the user saves them. Give the files fixed names when an updater downloads
-  `releases/latest/download/<name>`.
+  `releases/latest/download/<name>`. A `run` that needs several steps calls a script of the
+  project (`bash scripts/release-build.sh <target>`).
+- An updater manifest (Tauri `latest.json`) goes in `finish`: download the `.sig` files from
+  the draft, build the manifest, upload it. The Release turns latest only after that, so
+  `releases/latest/download/latest.json` never points to a release without it.
 
 ## mobile
 

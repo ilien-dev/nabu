@@ -145,6 +145,8 @@ export function normalizeRules(input) {
   rel.build = rel.build || [];
   rel.buildSecrets = rel.buildSecrets || [];
   rel.npmPrepare = rel.npmPrepare || [];
+  rel.finish = rel.finish || [];
+  if (rel.finish.some((c) => typeof c !== 'string' || !c.trim())) problems.push('every "release.finish" entry must be a shell command');
   if (rel.kind !== 'none') {
     if (!/^\d+\.\d+\.\d+/.test(rel.currentVersion || '')) problems.push('"release.currentVersion" must be the version released now, e.g. 0.2.0');
     if (rel.kind !== 'library' && rel.versionFiles.length === 0) problems.push('"release.versionFiles" must list the files that carry the version');
@@ -265,6 +267,9 @@ function context(rules, repo) {
     buildSecrets: rel.buildSecrets.length ? ['        env:', ...rel.buildSecrets.map((s) => `          ${s}: \${{ secrets.${s} }}`)].join('\n') : '',
     npm: rel.kind === 'npm',
     npmPrepare: rel.npmPrepare.map((c) => `      - run: ${c}`).join('\n'),
+    publishNeeds: ['release', ...(rel.build.length ? ['build'] : []), ...(rel.kind === 'npm' ? ['npm'] : [])].join(', '),
+    finish: rel.finish.length > 0,
+    finishSteps: ['      - name: Finish', '        shell: bash', '        run: |', ...rel.finish.map((c) => `          ${c}`)].join('\n'),
   };
 }
 
@@ -276,6 +281,10 @@ function releasePleaseConfig(rules, bootstrapSha) {
     'include-component-in-tag': false,
     'include-v-in-tag': true,
     'bump-minor-pre-major': true,
+    // The Release stays a draft until release.yml has attached everything and publishes it;
+    // the tag is created at once so the next run finds this release.
+    draft: true,
+    'force-tag-creation': true,
     'changelog-path': 'CHANGELOG.md',
     'changelog-sections': STANDARD.types.map((t) => ({ type: t, section: SECTION_TITLES[t], hidden: !rules.releaseTypes.includes(t) })),
     'extra-files': rel.versionFiles.map((f) => {

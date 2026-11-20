@@ -5,7 +5,11 @@ name: Release
 # a squash-merged pull request) and opens or updates "chore(main): release X.Y.Z" with the
 # next version in every file of release-please-config.json and the new section of
 # CHANGELOG.md. This workflow merges that pull request at once and runs release-please again,
-# which creates the tag and the GitHub Release.
+# which creates the tag and the GitHub Release as a draft. The jobs that attach files or
+# publish elsewhere run from that tag, and only when all of them succeed does "publish" make
+# the Release public and latest: nobody sees, downloads or updates to a release that is not
+# complete. A failed job leaves the draft: "Re-run failed jobs" on that same run finishes it.
+# A new run releases nothing for that version; to drop it, delete the draft and its tag.
 # feat: raises the minor number, fix:, perf: and revert: the patch one, and a ! after the type the major one; docs, test, ci, chore, refactor, build and style release nothing.
 #
 # Everything runs with RELEASE_TOKEN, a fine-grained token of a repository admin (Contents
@@ -76,3 +80,16 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
           skip-github-pull-request: true
+
+  # Makes the draft public and latest once every job above has succeeded.
+  publish:
+    name: Publish the Release
+    needs: [release]
+    if: needs.release.outputs.created == 'true'
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ needs.release.outputs.tag }}
+      VERSION: ${{ needs.release.outputs.version }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - run: gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
