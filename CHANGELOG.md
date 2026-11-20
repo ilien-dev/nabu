@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/ilien-dev/nabu/compare/v0.3.0...v0.3.1) (2026-11-20)
+
+
+### Bug Fixes
+
+* run the generated workflows on node 24 actions ([#13](https://github.com/ilien-dev/nabu/issues/13)) ([1fc8401](https://github.com/ilien-dev/nabu/commit/1fc8401feb33489c2b73155fb9724205c93bf43a))
+
 ## [0.3.0](https://github.com/ilien-dev/nabu/compare/v0.2.3...v0.3.0) (2026-11-20)
 
 
