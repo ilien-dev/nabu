@@ -1,0 +1,109 @@
+{
+  "audience": "technical",
+  "audience_confirmed": true,
+  "sentence": "A maintainer whose project is already on GitHub runs one command, answers three questions, and from then on only reviews pull requests: branch names, PR descriptions, checks, versions and releases take care of themselves.",
+  "language": "en",
+  "translations": [],
+  "unfinished": [],
+  "captures_agreed": false,
+  "backdrop": "grid still",
+  "hero": {
+    "file": "assets/hero.src.svg",
+    "shows": [
+      "a plain repository card",
+      "the Nabu box on a belt",
+      "the same repository with contribution files",
+      "pull requests arriving",
+      "a protected main branch",
+      "a published release"
+    ]
+  },
+  "sections": [
+    {
+      "heading": "How the setup works",
+      "role": "how",
+      "docs": null,
+      "picture": {
+        "file": "assets/readme/how.src.svg",
+        "type": "drawn",
+        "claim": "One run asks three questions, then writes the files and applies the GitHub settings by itself.",
+        "shows": [
+          "an agent chat asking three questions",
+          "answer chips",
+          "init render verify github stations",
+          "settings switches"
+        ]
+      }
+    },
+    {
+      "heading": "What every pull request gets",
+      "role": "features",
+      "docs": null,
+      "picture": {
+        "file": "assets/readme/features.src.svg",
+        "type": "drawn",
+        "claim": "Every pull request is checked against one short format before anyone reviews it.",
+        "shows": [
+          "a pull request form",
+          "branch name",
+          "title",
+          "What Why How Risk Evidence sections",
+          "the PR rules check marking each part"
+        ]
+      }
+    },
+    {
+      "heading": "Install",
+      "role": "install",
+      "docs": null
+    },
+    {
+      "heading": "After the setup",
+      "role": "use",
+      "docs": null,
+      "picture": {
+        "file": "assets/readme/use.src.svg",
+        "type": "drawn",
+        "claim": "The type in a merged PR's title decides the next version; nobody writes one by hand.",
+        "shows": [
+          "merged PR titles",
+          "a version counter",
+          "changelog lines",
+          "a release"
+        ]
+      }
+    },
+    {
+      "heading": "Commands",
+      "role": "reference",
+      "docs": null
+    },
+    {
+      "heading": "Limits",
+      "role": "limits",
+      "docs": null
+    },
+    {
+      "heading": "Tests",
+      "role": "develop",
+      "docs": null
+    },
+    {
+      "heading": "Contributing",
+      "role": "contributing",
+      "docs": null
+    },
+    {
+      "heading": "License",
+      "role": "license",
+      "docs": null
+    }
+  ],
+  "assets": {
+    "icons": {
+      "family": "octicon",
+      "variant": "24",
+      "why": "Solid GitHub glyphs match the solid isometric mark, and the README is about PRs, branches and tags on GitHub"
+    }
+  }
+}

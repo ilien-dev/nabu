@@ -1,0 +1,278 @@
+{
+  "picture:how.src.svg": {
+    "sha": "0f51812f1c55784c",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Blind judge saw three questions answered, then a pipeline writing files, checking them and switching on GitHub settings."
+  },
+  "section:How the setup works": {
+    "sha": "ab838421427bcd73",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Reader got the three questions, init/render/verify writing the files, and the agent applying the GitHub settings itself (after the setup PR is merged)."
+  },
+  "picture:features.src.svg": {
+    "sha": "863a387a694a835e",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Blind judge saw a 'PR rules' check confirming branch, title and each section, ending in 'passed, ready for review'."
+  },
+  "section:What every pull request gets": {
+    "sha": "38f71c541eb85ab3",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Reader understood every PR must follow one fixed format enforced by a single 'PR rules' check."
+  },
+  "picture:use.src.svg": {
+    "sha": "30de7833764d90c1",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Blind judge saw the type of each merged commit (feat, fix, docs, feat!) set the version bump automatically."
+  },
+  "section:After the setup": {
+    "sha": "768e86147e550c03",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Reader understood release-please reads merged PR titles and the type decides the bump; versions are automatic."
+  },
+  "icon:hero.src.svg#1": {
+    "sha": "dfe01e01529d7dd0",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a folder, the repository or project folder; sure."
+  },
+  "icon:hero.src.svg#2": {
+    "sha": "1e677a468204260b",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as the active folder or repository; sure."
+  },
+  "icon:hero.src.svg#3": {
+    "sha": "e1941c485e6e341d",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:hero.src.svg#4": {
+    "sha": "66a94eb80473c197",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:hero.src.svg#5": {
+    "sha": "e3ddf8ceb954a24b",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:hero.src.svg#6": {
+    "sha": "65bffdac45f9f7be",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:hero.src.svg#7": {
+    "sha": "d40bae7720cbe16a",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a padlock meaning a protected branch; sure."
+  },
+  "icon:hero.src.svg#8": {
+    "sha": "bd6c0784accf6664",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a version tag or release; sure."
+  },
+  "icon:hero.src.svg#9": {
+    "sha": "117b430ddbce5fd1",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a person (user or contributor); sure."
+  },
+  "icon:hero.src.svg#10": {
+    "sha": "154a3565b5813da0",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a person; sure."
+  },
+  "icon:hero.src.svg#11": {
+    "sha": "e52a88373a24cf50",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a person; sure."
+  },
+  "icon:how.src.svg#1": {
+    "sha": "5ee63a831598098d",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a question to answer; sure."
+  },
+  "icon:how.src.svg#2": {
+    "sha": "0d21efdc5bf4c1eb",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a question; sure."
+  },
+  "icon:how.src.svg#3": {
+    "sha": "664295ab8240f081",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a question; sure."
+  },
+  "icon:how.src.svg#4": {
+    "sha": "c0af7fde5c72407e",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as the saved answers file (answers.json); sure."
+  },
+  "icon:how.src.svg#5": {
+    "sha": "31eec452dcbd3ac3",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:how.src.svg#6": {
+    "sha": "060590207884cf02",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:how.src.svg#7": {
+    "sha": "73cf3bc0c331703d",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:how.src.svg#8": {
+    "sha": "551a46055bcedad7",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file; sure."
+  },
+  "icon:how.src.svg#9": {
+    "sha": "ba1221d64866aa8c",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as passed/verified; sure."
+  },
+  "icon:features.src.svg#1": {
+    "sha": "167825c15e030bc1",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a git branch, the PR's branch name; sure."
+  },
+  "icon:features.src.svg#2": {
+    "sha": "16852e7dc35f72d6",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed (on the branch row); sure."
+  },
+  "icon:features.src.svg#3": {
+    "sha": "210891c95b9eaf09",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed (on the title row); sure."
+  },
+  "icon:features.src.svg#4": {
+    "sha": "784751d13ced7e91",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed for that section; sure."
+  },
+  "icon:features.src.svg#5": {
+    "sha": "84a010051c5f75d7",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed for that section; sure."
+  },
+  "icon:features.src.svg#6": {
+    "sha": "1a30dac4e1ca4a07",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed for that section; sure."
+  },
+  "icon:features.src.svg#7": {
+    "sha": "7288588e0e66e892",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed for that section; sure."
+  },
+  "icon:features.src.svg#8": {
+    "sha": "b7f87d529c486e74",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed for that section; sure."
+  },
+  "icon:features.src.svg#9": {
+    "sha": "621a6974bc9fc063",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as check passed for the checklist; sure."
+  },
+  "icon:features.src.svg#10": {
+    "sha": "466a412236429874",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a status check (the 'PR rules' check); sure."
+  },
+  "icon:features.src.svg#11": {
+    "sha": "e62e7ca1df011b7c",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as passed or ready; sure."
+  },
+  "icon:features.src.svg#12": {
+    "sha": "c66e522e38e61398",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as merge a pull request; sure."
+  },
+  "icon:use.src.svg#1": {
+    "sha": "ab7620651a9d3c23",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a merged pull request; sure."
+  },
+  "icon:use.src.svg#2": {
+    "sha": "e0dd81b3910c33ca",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a merged pull request; sure."
+  },
+  "icon:use.src.svg#3": {
+    "sha": "8a8170907a4d6c59",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a merged pull request; sure."
+  },
+  "icon:use.src.svg#4": {
+    "sha": "c6902e46be2e7128",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a merged pull request; sure."
+  },
+  "icon:use.src.svg#5": {
+    "sha": "9d30ef4f59bf91de",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a version tag; sure."
+  },
+  "icon:use.src.svg#6": {
+    "sha": "38b9f84e2e7731ed",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as a file, CHANGELOG.md; sure."
+  },
+  "icon:use.src.svg#7": {
+    "sha": "1c07d8e5ea7d61eb",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Read as create or publish a release; sure."
+  },
+  "readme": {
+    "sha": "7bb91881eac7f277",
+    "pass": true,
+    "answer": "cold read by fresh blind and reader agents, graded by a third",
+    "why": "Reader: GitHub repo owners run one command, give three answers, and then only review and merge PRs while format checks, versions and releases are automatic."
+  }
+}
